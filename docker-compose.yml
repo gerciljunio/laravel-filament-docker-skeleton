@@ -1,0 +1,47 @@
+name: ${DOCKER_PROJECT_NAME}
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "${DB_PORT}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  redis:
+    image: redis:7
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "${MAILPIT_PORT_WEB}:8025"
+      - "${MAILPIT_PORT_SMTP}:1025"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8025/healthz"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  mysql_data:
+  redis_data:
