@@ -10,6 +10,7 @@
         "filament/filament": "^4.0",
         "laravel/framework": "^12.0",
         "laravel/octane": "^2.13",
+        "laravel/passport": "^13.0",
         "laravel/tinker": "^2.10.1",
         "league/flysystem-aws-s3-v3": "^3.0"
     },
@@ -73,57 +74,11 @@
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
         ],
 
-        "clear": [
-            "@php artisan optimize:clear",
-            "@php artisan optimize",
-            "@php artisan config:clear"
-        ],
-
-        "up": [
-            "docker compose up -d",
-            "@php artisan octane:start --watch"
-        ],
-
-        "octane": "@php artisan octane:start",
-        "start": [
-            "docker compose start",
-            "@php artisan octane:start --watch"
-        ],
-        "stop": "docker compose stop",
-
-        "down": "docker compose down",
-
-        "downall": "docker compose down -v --remove-orphans",
-
-        "ps": "docker ps",
-
-        "logs": "docker compose logs -f --tail=100",
-
-        "sh-mysql": "docker compose exec mysql sh",
-        "sh-redis": "docker compose exec redis sh",
-        "sh-mailpit": "docker compose exec mailpit sh",
-
-        "restart": [
-            "docker compose down",
-            "docker compose up -d",
-            "@php artisan octane:start"
-        ],
-
-        "rebuild": [
-            "docker compose build --no-cache",
-            "docker compose up -d",
-            "@php artisan octane:start"
-        ],
-
-        "reset": [
-            "docker compose down -v --remove-orphans",
-            "docker compose up -d --build",
-            "@php artisan octane:start"
-        ],
-
-        "logs-mysql": "docker compose logs -f --tail=200 mysql || true",
-        "logs-redis": "docker compose logs -f --tail=200 redis || true",
-        "logs-mailpit": "docker compose logs -f --tail=200 mailpit || true"
+        "install-passport-personal": [
+            "composer require laravel/passport",
+            "php artisan install:api --passport",
+            "php artisan passport:client --personal"
+        ]
     },
     "extra": {
         "laravel": {
