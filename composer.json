@@ -72,12 +72,6 @@
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
-        ],
-
-        "install-passport-personal": [
-            "composer require laravel/passport",
-            "php artisan install:api --passport",
-            "php artisan passport:client --personal"
         ]
     },
     "extra": {
