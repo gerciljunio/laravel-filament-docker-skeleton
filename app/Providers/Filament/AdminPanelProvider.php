@@ -32,6 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path(env('APP_FILAMENT_PATH', 'admin'))
+            ->favicon(asset('favicon.ico'))
 
             // Navigation Menu
             ->navigationGroups([
