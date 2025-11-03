@@ -58,15 +58,16 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-## First commands
+## First commands DEV ENV
 
 ```
 composer install
 php artisan key:generate
 php artisan octane:install --server=roadrunner
-php artisan migrate --force --silent
+php artisan migrate --force
 php artisan make:filament-user
-php artisan install:api --passport
+php artisan passport:keys
 php artisan passport:client --personal
 php artisan horizon:install
+npm install chokidar
 ```
