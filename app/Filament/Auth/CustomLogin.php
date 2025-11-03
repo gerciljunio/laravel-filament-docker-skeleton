@@ -4,13 +4,14 @@ namespace App\Filament\Auth;
 
 use Filament\Actions\Action;
 use Filament\Schemas\Schema;
+use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Log;
 use Filament\Schemas\Components\Form;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Auth\Pages\Login as BaseLogin;
 use Filament\Auth\Http\Responses\Contracts\LoginResponse;
-use Filament\Notifications\Notification;
 
 class CustomLogin extends BaseLogin
 {
@@ -18,7 +19,7 @@ class CustomLogin extends BaseLogin
     {
         $code = request()->get('code');
         $email = request()->get('email');
-        $showCode = request()->boolean('showCode');
+        $showCodeKey = 'showCode';
 
         return $schema->schema([
             TextInput::make('email')
@@ -36,9 +37,9 @@ class CustomLogin extends BaseLogin
                 ->revealable(filament()->arePasswordsRevealable())
                 ->autocomplete('current-password')
                 // senha só é obrigatória quando showCode=1 ou quando existe ?code=
-                ->required(fn () => request()->boolean('showCode') || filled(request('code')))
+                ->required(fn () => request()->boolean($showCodeKey) || filled(request('code')))
                 ->extraInputAttributes(['tabindex' => 2])
-                ->visible(fn () => filled($code) || request()->method() === 'POST' || request()->get('showCode'))
+                ->visible(fn () => filled($code) || request()->method() === 'POST' || request()->get($showCodeKey))
                 ->default(fn () => $code),
 
             Checkbox::make('remember')
@@ -73,7 +74,11 @@ class CustomLogin extends BaseLogin
 
         if (!$password) {
 
-            // Processo de login com senha temporária: cria, envia, valida, usa, altera
+            //
+            //
+            // Processo de login com senha temporária
+            // Cada um cria da forma que desejar
+            //
             //
 
             // Mensagem de confirmação
@@ -84,7 +89,11 @@ class CustomLogin extends BaseLogin
                 ->duration(8000)
                 ->send();
 
-            $this->redirect('/admin/login?showCode=1&email=' . urlencode((string) $email), navigate: true);
+            $this->redirect(route('filament.admin.auth.login', [
+                'showCode' => true,
+                'email' => $email,
+            ]), navigate: true);
+
             return null;
         }
 

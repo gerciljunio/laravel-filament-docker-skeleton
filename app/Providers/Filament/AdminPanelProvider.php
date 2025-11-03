@@ -27,42 +27,42 @@ class AdminPanelProvider extends PanelProvider
         $panel = $panel
             ->default()
             ->id('admin')
-            ->path('admin');
+            ->path(env('APP_FILAMENT_PATH', 'admin'));
 
-            if (env('PASSWORDLESS_LOGIN') == true) {
-                $panel = $panel->login(env('PASSWORDLESS_LOGIN') == true ? CustomLogin::class : null);
-            } else {
-                $panel = $panel->login();
-            }
+        if (env('PASSWORDLESS_LOGIN') == true) {
+            $panel = $panel->login(env('PASSWORDLESS_LOGIN') == true ? CustomLogin::class : null);
+        } else {
+            $panel = $panel->login();
+        }
 
-            $panel = $panel->passwordReset()
-            ->colors([
-                'primary' => Color::Amber,
-            ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
-            ->pages([
-                Dashboard::class,
-            ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
-            ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
-            ])
-            ->middleware([
-                EncryptCookies::class,
-                AddQueuedCookiesToResponse::class,
-                StartSession::class,
-                AuthenticateSession::class,
-                ShareErrorsFromSession::class,
-                VerifyCsrfToken::class,
-                SubstituteBindings::class,
-                DisableBladeIconComponents::class,
-                DispatchServingFilamentEvent::class,
-            ])
-            ->authMiddleware([
-                Authenticate::class,
-            ]);
+        $panel = $panel->passwordReset()
+        ->colors([
+            'primary' => Color::Amber,
+        ])
+        ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
+        ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
+        ->pages([
+            Dashboard::class,
+        ])
+        ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
+        ->widgets([
+            AccountWidget::class,
+            // FilamentInfoWidget::class,
+        ])
+        ->middleware([
+            EncryptCookies::class,
+            AddQueuedCookiesToResponse::class,
+            StartSession::class,
+            AuthenticateSession::class,
+            ShareErrorsFromSession::class,
+            VerifyCsrfToken::class,
+            SubstituteBindings::class,
+            DisableBladeIconComponents::class,
+            DispatchServingFilamentEvent::class,
+        ])
+        ->authMiddleware([
+            Authenticate::class,
+        ])->authGuard('web');
 
         return $panel;
     }

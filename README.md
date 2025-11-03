@@ -67,4 +67,5 @@ php artisan migrate --force
 php artisan make:filament-user
 php artisan install:api --passport
 php artisan passport:client --personal
+php artisan horizon:install
 ```
